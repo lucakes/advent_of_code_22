@@ -31,8 +31,33 @@ def calculate_sum_priorities(input):
     return sum_score
 
 
+def find_common_letter(group):
+    for letter in group[0]:
+        contained_one = group[1].find(letter)
+        if contained_one != -1:
+            contained_two = group[2].find(letter)
+            if contained_two != -1:
+                return letter
+
+
+def score_group(group):
+    letter = find_common_letter(group)
+    return calculate_score_letter(letter)
+
+
+def calculate_part_two(input):
+    rucksacks = input.split("\n")
+    split_points = [i for i in range(0, len(rucksacks), 3)]
+    group_of_rucksacks = [rucksacks[ind:ind + 3] for ind in split_points]
+    score = 0
+    for group in group_of_rucksacks:
+        score = score + score_group(group)
+    return score
+
+
 if __name__ == "__main__":
     for path in sys.argv[1:]:
         input = pathlib.Path(path).read_text().strip()
         solution_part_one = calculate_sum_priorities(input)
-        print("solution part one: " + str(solution_part_one))
+        solution_part_two = calculate_part_two(input)
+        print("solution part one: " + str(solution_part_one)+" solution part two: " + str(solution_part_two))
